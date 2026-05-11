@@ -1,23 +1,10 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-import { VALID, ALLOWED_ORIGINS } from "../../src/config.js";
+import { VALID } from "../../src/config.js";
+import { setCorsHeaders } from "../../src/cors.js";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 function validateParam(value: unknown): value is string {
   return typeof value === "string" && VALID.test(value);
-}
-
-function setCorsHeaders(req: VercelRequest, res: VercelResponse): boolean {
-  const origin = req.headers["origin"];
-  if (origin !== undefined && ALLOWED_ORIGINS.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  }
-  if (req.method === "OPTIONS") {
-    res.status(204).end();
-    return true;
-  }
-  return false;
 }
 
 export default async (
