@@ -1,10 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-const VALID = /^[a-zA-Z0-9_.-]+$/;
-const ALLOWED_ORIGINS = (process.env["ALLOWED_ORIGINS"] ?? "")
-  .split(',')
-  .map(o => o.trim())
-  .filter(Boolean);
+import { VALID, ALLOWED_ORIGINS } from "../../src/config.js";
 
 function validateParam(value: unknown): value is string {
   return typeof value === "string" && VALID.test(value);
