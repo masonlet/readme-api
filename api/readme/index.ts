@@ -1,11 +1,6 @@
-
-import { VALID } from "../../src/config.js";
-import { setCorsHeaders } from "../../src/cors.js";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-
-function validateParam(value: unknown): value is string {
-  return typeof value === "string" && VALID.test(value);
-}
+import { setCorsHeaders } from "../../src/cors.js";
+import { validateParam } from "../../src/validate.js";
 
 export default async (
   req: VercelRequest,
