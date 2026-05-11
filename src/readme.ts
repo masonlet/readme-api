@@ -1,8 +1,4 @@
-export class ReadmeError extends Error {
-  constructor(public readonly status: number, message: string) {
-    super(message);
-  }
-}
+import { HttpError } from "./http-error.js";
 
 export async function fetchReadme(owner: string, repo: string): Promise<string> {
    const headers = {
@@ -23,13 +19,13 @@ export async function fetchReadme(owner: string, repo: string): Promise<string> 
 
       if (response.status === 403
        && response.headers.get("x-ratelimit-remaining") === "0"
-      ) throw new ReadmeError(429, "GitHub rate limit exceeded");
+      ) throw new HttpError(429, "GitHub rate limit exceeded");
 
-      throw new ReadmeError(response.status, `Failed to fetch README: ${response.status}`);
+      throw new HttpError(response.status, `Failed to fetch README: ${response.status}`);
     }
 
     const html = await response.text();
-    if (!html?.trim())  throw new ReadmeError(404, "No README content found");
+    if (!html?.trim())  throw new HttpError(404, "No README content found");
 
     const rawBase = `https://raw.githubusercontent.com/${owner}/${repo}/HEAD`;
     const baseUrl = `https://github.com/${owner}/${repo}`;
